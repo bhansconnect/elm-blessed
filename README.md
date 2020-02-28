@@ -1,4 +1,4 @@
-# blessed-elm
+# elm-blessed
 
 A elm wrapper for [blessed](https://github.com/chjj/blessed).
 

@@ -31,8 +31,20 @@ fg =
     StringProp "fg"
 
 
+bg =
+    StringProp "bg"
+
+
 border =
     NestedProp "border"
+
+
+focus =
+    NestedProp "focus"
+
+
+style =
+    NestedProp "style"
 
 
 leftExact =
@@ -49,3 +61,7 @@ widthExact =
 
 heightExact =
     IntProp "height"
+
+
+keys =
+    BoolProp "keys"

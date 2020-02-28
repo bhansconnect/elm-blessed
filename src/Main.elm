@@ -1,7 +1,7 @@
 module Main exposing (main)
 
-import Blessed exposing (box, button, root)
-import Blessed.Events exposing (onClick)
+import Blessed exposing (button, form, root)
+import Blessed.Events exposing (onPress)
 import Blessed.Props exposing (..)
 import Command
 import Json.Decode exposing (Decoder, Value, andThen, decodeValue, errorToString, field, string, succeed)
@@ -114,14 +114,15 @@ view model =
     root Command.encode
         []
         []
-        [ box
+        [ form
             [ top "center"
             , left "center"
             , align "center"
             , width "50%"
             , heightExact 5
             , content (String.fromInt model.counter)
-            , border [ kind "line" ]
+            , keys True
+            , border [ fg "blue", kind "line" ]
             ]
             []
             [ button
@@ -130,9 +131,11 @@ view model =
                 , widthExact 5
                 , align "center"
                 , content "-"
+                , keys True
+                , style [ focus [ bg "red" ] ]
                 , border [ kind "line" ]
                 ]
-                [ onClick Command.Dec ]
+                [ onPress Command.Dec ]
                 []
             , button
                 [ rightExact 10
@@ -140,9 +143,11 @@ view model =
                 , widthExact 5
                 , align "center"
                 , content "+"
+                , keys True
+                , style [ focus [ bg "red" ] ]
                 , border [ kind "line" ]
                 ]
-                [ onClick Command.Inc ]
+                [ onPress Command.Inc ]
                 []
             ]
         ]

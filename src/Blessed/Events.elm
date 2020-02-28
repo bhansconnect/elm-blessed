@@ -5,3 +5,7 @@ import Blessed exposing (Event(..))
 
 onClick =
     Event "click"
+
+
+onPress =
+    Event "press"

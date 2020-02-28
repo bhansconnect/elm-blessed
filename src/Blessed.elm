@@ -1,6 +1,6 @@
-port module Blessed exposing (sendModel, Event(..), Prop(..), box, button, recieveMessage, root, sendError, sendModelIfChanged)
+port module Blessed exposing (Event(..), Prop(..), box, button, form, recieveMessage, root, sendError, sendModel, sendModelIfChanged)
 
-import Json.Encode exposing (Value, int, string, object, list)
+import Json.Encode exposing (Value, bool, int, list, object, string)
 
 
 port sendState : Value -> Cmd msg
@@ -12,22 +12,25 @@ port sendError : String -> Cmd msg
 port recieveMessage : (Value -> msg) -> Sub msg
 
 
-sendModel: (model -> Value) -> ( model, Cmd msg ) -> ( model, Cmd msg )
-sendModel encoder ( model, cmd ) = 
+sendModel : (model -> Value) -> ( model, Cmd msg ) -> ( model, Cmd msg )
+sendModel encoder ( model, cmd ) =
     ( model
-        , Cmd.batch
-            [ cmd
-            , sendState
-                (encoder model)
-            ]
-        )
+    , Cmd.batch
+        [ cmd
+        , sendState
+            (encoder model)
+        ]
+    )
+
 
 sendModelIfChanged : (model -> Value) -> model -> ( model, Cmd msg ) -> ( model, Cmd msg )
 sendModelIfChanged encoder oldModel ( newModel, cmd ) =
     if oldModel == newModel then
         ( newModel, cmd )
+
     else
         sendModel encoder ( newModel, cmd )
+
 
 type Element cmd
     = Element String (List Prop) (List (Event cmd)) (List (Element cmd))
@@ -40,6 +43,7 @@ type Event cmd
 type Prop
     = StringProp String String
     | IntProp String Int
+    | BoolProp String Bool
     | NestedProp String (List Prop)
 
 
@@ -67,6 +71,9 @@ encodeProp prop =
         IntProp key val ->
             ( key, int val )
 
+        BoolProp key val ->
+            ( key, bool val )
+
         NestedProp key val ->
             ( key, object (List.map encodeProp val) )
 
@@ -85,6 +92,10 @@ encodeEvent cmdEncoder (Event key cmd) =
 
 box =
     Element "box"
+
+
+form =
+    Element "form"
 
 
 button =
